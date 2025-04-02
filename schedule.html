@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Savvy Rides - Schedule</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6789b5;
+            --accent-color: #ff9f43;
+            --light-color: #f5f6fa;
+            --dark-color: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        main {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-header h2 {
+            color: var(--dark-color);
+        }
+
+        .schedule-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .date-navigation {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .current-date {
+            font-weight: 600;
+            font-size: 1.2rem;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-option:hover {
+            background-color: var(--light-color);
+        }
+
+        .view-option.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            min-height: 100px;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            background-color: var(--light-color);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-number {
+            font-weight: 600;
+        }
+
+        .day-number.today {
+            background-color: var(--accent-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .event {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius);
+            background-color: var(--light-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .event:hover {
+            transform: translateX(2px);
+        }
+
+        .event.pickup {
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .event.dropoff {
+            border-left: 3px solid var(--success-color);
+        }
+
+        .event.appointment {
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .schedule-list {
+            display: none;
+        }
+
+        .schedule-item {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr 100px 120px;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .schedule-item:hover {
+            background-color: var(--light-color);
+        }
+
+        .schedule-time {
+            font-weight: 600;
+        }
+
+        .schedule-client {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .client-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .schedule-locations {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .pickup-location::before {
+            content: "🡅";
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .dropoff-location::before {
+            content: "🡇";
+            margin-right: 0.5rem;
+            color: var(--success-color);
+        }
+
+        .schedule-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.scheduled {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .status.in-progress {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+
+        .status.completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .schedule-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #fb8c00;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #e53935;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            color: var(--dark-color);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .schedule-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .calendar-header {
+                display: none;
+            }
+
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-day {
+                min-height: auto;
+            }
+
+            .day-events {
+                display: none;
+            }
+
+            .schedule-list {
+                display: block;
+            }
+
+            .schedule-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .schedule-actions {
+                justify-content: flex-end;
+                margin-top: 0.5rem;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            <span>Tech Savvy Rides</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Clients</a></li>
+                <li><a href="#">Drivers</a></li>
+                <li><a href="#" class="active">Schedule</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <span>Admin</span>
+            <img src="/api/placeholder/40/40" alt="User Avatar">
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-car"></i> Ride Requests</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-calendar"></i> Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#"><i class="fas fa-id-card"></i> Drivers</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="#" id="new-schedule-btn"><i class="fas fa-plus"></i> New Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-print"></i> Print Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-file-export"></i> Export Schedule</a></li>
+                </ul>
+            </aside>
+
+            <section class="content">
+                <div class="content-header">
+                    <h2>Ride Schedule</h2>
+                    <button class="btn btn-primary" id="add-schedule-btn"><i class="fas fa-plus"></i> Schedule Ride</button>
+                </div>
+
+                <div class="schedule-controls">
+                    <div class="date-navigation">
+                        <button class="btn btn-secondary" id="prev-week"><i class="fas fa-chevron-left"></i></button>
+                        <div class="current-date">March 25 - 31, 2025</div>
+                        <button class="btn btn-secondary" id="next-week"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="view-options">
+                        <button class="view-option active" data-view="week">Week</button>
+                        <button class="view-option" data-view="day">Day</button>
+                        <button class="view-option" data-view="list">List</button>
+                    </div>
+                </div>
+
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <div>Sunday</div>
+                        <div>Monday</div>
+                        <div>Tuesday</div>
+                        <div>Wednesday</div>
+                        <div>Thursday</div>
+                        <div>Friday</div>
+                        <div>Saturday</div>
+                    </div>
+                    <div class="calendar-grid">
+                        <!-- Sunday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">25</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Margaret Johnson - 9:00 AM</div>
+                                <div class="event dropoff">Robert Smith - 10:30 AM</div>
+                                <div class="event pickup">James Wilson - 2:00 PM</div>
+                            </div>
+                        </div>
+                        <!-- Monday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">26</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Eleanor Davis - 8:30 AM</div>
+                                <div class="event dropoff">Emma Thompson - 11:00 AM</div>
+                                <div class="event appointment">Margaret Johnson - 1:30 PM</div>
+                            </div>
+                        </div>
+                        <!-- Tuesday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">27</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Robert Smith - 10:00 AM</div>
+                                <div class="event dropoff">James Wilson - 12:30 PM</div>
+                            </div>
+                        </div>
+                        <!-- Wednesday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">28</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Emma Thompson - 9:30 AM</div>
+                                <div class="event dropoff">Eleanor Davis - 11:45 AM</div>
+                                <div class="event pickup">Margaret Johnson - 3:00 PM</div>
+                            </div>
+                        </div>
+                        <!-- Thursday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number today">29</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">James Wilson - 8:00 AM</div>
+                                <div class="event dropoff">Robert Smith - 10:15 AM</div>
+                                <div class="event pickup">Eleanor Davis - 2:30 PM</div>
+                                <div class="event dropoff">Emma Thompson - 4:45 PM</div>
+                            </div>
+                        </div>
+                        <!-- Friday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">30</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Margaret Johnson - 9:00 AM</div>
+                                <div class="event appointment">Robert Smith - 1:00 PM</div>
+                            </div>
+                        </div>
+                        <!-- Saturday -->
+                        <div class="calendar-day">
+                            <div class="day-header">
+                                <div class="day-number">31</div>
+                            </div>
+                            <div class="day-events">
+                                <div class="event pickup">Emma Thompson - 10:30 AM</div>
+                                <div class="event dropoff">James Wilson - 12:00 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <div class="schedule-time">9:00 AM</div>
+                        <div class="schedule-client">
+                            <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                            <span>Margaret Johnson</span>
+                        </div>
+                        <div class="schedule-locations">
+                            <div class="pickup-location">123 Oak St</div>
+                            <div class="dropoff-location">Medical Center</div>
+                        </div>
+                        <div class="schedule-status status scheduled">Scheduled</div>
+                        <div class="schedule-actions">
+                            <button class="btn btn-secondary"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:30 AM</div>
+                        <div class="schedule-client">
+                            <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                            <span>Robert Smith</span>
+                        </div>
+                        <div class="schedule-locations">
+                            <div class="pickup-location">456 Pine Ave</div>
+                            <div class="dropoff-location">Community Center</div>
+                        </div>
+                        <div class="schedule-status status in-progress">In Progress</div>
+                        <div class="schedule-actions">
+                            <button class="btn btn-secondary"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">2:00 PM</div>
+                        <div class="schedule-client">
+                            <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                            <span>James Wilson</span>
+                        </div>
+                        <div class="schedule-locations">
+                            <div class="pickup-location">101 Elm St</div>
+                            <div class="dropoff-location">Senior Center</div>
+                        </div>
+                        <div class="schedule-status status completed">Completed</div>
+                        <div class="schedule-actions">
+                            <button class="btn btn-secondary"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Schedule Ride Modal -->
+    <div id="schedule-ride-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Schedule New Ride</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="schedule-ride-form">
+                <div class="form-group">
+                    <label for="schedule-client">Client:</label>
+                    <select id="schedule-client" class="form-control" required>
+                        <option value="">Select a client</option>
+                        <option value="1">Margaret Johnson</option>
+                        <option value="2">Robert Smith</option>
+                        <option value="3">Eleanor Davis</option>
+                        <option value="4">James Wilson</option>
+                        <option value="5">Emma Thompson</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="schedule-date">Date:</label>
+                        <input type="date" id="schedule-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="schedule-time">Time:</label>
+                        <input type="time" id="schedule-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pickup-location">Pickup Location:</label>
+                    <input type="text" id="pickup-location" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dropoff-location">Dropoff Location:</label>
+                    <input type="text" id="dropoff-location" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="schedule-driver">Driver:</label>
+                    <select id="schedule-driver" class="form-control" required>
+                        <option value="">Select a driver</option>
+                        <option value="1">Michael Brown (Van #12)</option>
+                        <option value="2">Sarah Jones (Sedan #5)</option>
+                        <option value="3">John Williams (Van #8)</option>
+                        <option value="4">Lisa Garcia (Sedan #3)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="special-instructions">Special Instructions:</label>
+                    <textarea id="special-instructions" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Schedule Ride</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ride Details Modal -->
+    <div id="ride-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ride Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Client:</label>
+                <div class="form-control-static">Margaret Johnson</div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date:</label>
+                    <div class="form-control-static">March 25, 2025</div>
+                </div>
+                <div class="form-group">
+                    <label>Time:</label>
+                    <div class="form-control-static">9:00 AM</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Pickup Location:</label>
+                <div class="form-control-static">123 Oak St, Anytown</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Dropoff Location:</label>
+                <div class="form-control-static">Medical Center, 456 Health Ave</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Driver:</label>
+                <div class="form-control-static">Michael Brown (Van #12)</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Status:</label>
+                <div class="form-control-static"><span class="status scheduled">Scheduled</span></div>
+            </div>
+            
+            <div class="form-group">
+                <label>Special Instructions:</label>
+                <div class="form-control-static">Needs wheelchair assistance</div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary cancel-modal">Close</button>
+                <button type="button" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</button>
+                <button type="button" class="btn btn-success"><i class="fas fa-check"></i> Mark Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const addScheduleBtn = document.getElementById('add-schedule-btn');
+        const newScheduleBtn = document.getElementById('new-schedule-btn');
+        const scheduleRideModal = document.getElementById('schedule-ride-modal');
+        const rideDetailsModal = document.getElementById('ride-details-modal');
+        const scheduleRideForm = document.getElementById('schedule-ride-form');
+        const closeButtons = document.querySelectorAll('.close');
+        const cancelButtons = document.querySelectorAll('.cancel-modal');
+        const viewOptions = document.querySelectorAll('.view-option');
+        const prevWeekBtn = document.getElementById('prev-week');
+        const nextWeekBtn = document.getElementById('next-week');
+        const currentDateEl = document.querySelector('.current-date');
+        const calendarView = document.querySelector('.calendar-view');
+        const scheduleList = document.querySelector('.schedule-list');
+        const calendarEvents = document.querySelectorAll('.event');
+
+        // Set current date
+        const today = new Date();
+        const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        updateCurrentDateDisplay();
+
+        // Event Listeners
+        addScheduleBtn.addEventListener('click', openScheduleRideModal);
+        newScheduleBtn.addEventListener('click', openScheduleRideModal);
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        cancelButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        viewOptions.forEach(option => {
+            option.addEventListener('click', switchView);
+        });
+        
+        prevWeekBtn.addEventListener('click', navigateWeek);
+        nextWeekBtn.addEventListener('click', navigateWeek);
+        
+        calendarEvents.forEach(event => {
+            event.addEventListener('click', openRideDetailsModal);
+        });
+        
+        scheduleRideForm.addEventListener('submit', scheduleNewRide);
+
+        // Window click event to close modals
+        window.addEventListener('click', (e) => {
+            if (e.target === scheduleRideModal || e.target === rideDetailsModal) {
+                closeModals();
+            }
+        });
+
+        // Functions
+        function openScheduleRideModal() {
+            scheduleRideModal.style.display = 'flex';
+            // Set default date to today
+            document.getElementById('schedule-date').valueAsDate = new Date();
+        }
+
+        function openRideDetailsModal() {
+            rideDetailsModal.style.display = 'flex';
+        }
+
+        function closeModals() {
+            scheduleRideModal.style.display = 'none';
+            rideDetailsModal.style.display = 'none';
+        }
+
+        function switchView(e) {
+            const view = e.target.getAttribute('data-view');
+            
+            // Update active button
+            viewOptions.forEach(option => {
+                option.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            
+            // Switch view
+            if (view === 'list') {
+                calendarView.style.display = 'none';
+                scheduleList.style.display = 'block';
+            } else {
+                calendarView.style.display = 'block';
+                scheduleList.style.display = 'none';
+            }
+        }
+
+        function navigateWeek(e) {
+            const direction = e.target.id === 'prev-week' ? -1 : 1;
+            currentDate.setDate(currentDate.getDate() + (direction * 7));
+            updateCurrentDateDisplay();
+        }
+
+        function updateCurrentDateDisplay() {
+            const startDate = new Date(currentDate);
+            startDate.setDate(startDate.getDate() - startDate.getDay()); // Start of week (Sunday)
+            
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6); // End of week (Saturday)
+            
+            const options = { month: 'long', day: 'numeric' };
+            const startStr = startDate.toLocaleDateString('en-US', options);
+            const endStr = endDate.toLocaleDateString('en-US', options);
+            const year = startDate.getFullYear();
+            
+            currentDateEl.textContent = `${startStr} - ${endStr}, ${year}`;
+            
+            // Highlight today in calendar
+            document.querySelectorAll('.day-number').forEach(day => {
+                day.classList.remove('today');
+                if (parseInt(day.textContent) === today.getDate() && 
+                    currentDate.getMonth() === today.getMonth() && 
+                    currentDate.getFullYear() === today.getFullYear()) {
+                    day.classList.add('today');
+                }
+            });
+        }
+
+        function scheduleNewRide(e) {
+            e.preventDefault();
+            
+            const client = document.getElementById('schedule-client').value;
+            const date = document.getElementById('schedule-date').value;
+            const time = document.getElementById('schedule-time').value;
+            const pickup = document.getElementById('pickup-location').value;
+            const dropoff = document.getElementById('dropoff-location').value;
+            const driver = document.getElementById('schedule-driver').value;
+            const instructions = document.getElementById('special-instructions').value;
+            
+            // In a real application, this would send data to a server
+            alert('Ride scheduled successfully!');
+            
+            // Reset form and close modal
+            scheduleRideForm.reset();
+            closeModals();
+            
+            // Update UI would happen here
+            console.log('New ride scheduled:', {
+                client,
+                date,
+                time,
+                pickup,
+                dropoff,
+                driver,
+                instructions
+            });
+        }
+    </script>
+</body>
+</html>
