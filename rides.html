@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Savvy Rides - Ride Requests</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6789b5;
+            --accent-color: #ff9f43;
+            --light-color: #f5f6fa;
+            --dark-color: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        main {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-header h2 {
+            color: var(--dark-color);
+        }
+
+        .request-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-dropdown select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            appearance: none;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .filter-dropdown i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            pointer-events: none;
+        }
+
+        .status-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--dark-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .status-tab:hover {
+            color: var(--primary-color);
+        }
+
+        .status-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .request-count {
+            display: inline-block;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .client-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.pending {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+
+        .status.assigned {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .status.completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .status.cancelled {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #fb8c00;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #e53935;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background-color: var(--light-color);
+        }
+
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            color: var(--dark-color);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Request Details Modal */
+        .request-details {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            min-width: 120px;
+        }
+
+        .detail-value {
+            flex: 1;
+        }
+
+        .mobility-aids {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .mobility-aid {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .request-filters {
+                flex-direction: column;
+            }
+
+            .status-tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            <span>Tech Savvy Rides</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#" class="active">Ride Requests</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <span>Admin</span>
+            <img src="/api/placeholder/40/40" alt="User Avatar">
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-car"></i> Ride Requests</a></li>
+                    <li><a href="#"><i class="fas fa-calendar"></i> Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#"><i class="fas fa-id-card"></i> Drivers</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="#" id="new-request-btn"><i class="fas fa-plus"></i> New Request</a></li>
+                    <li><a href="#"><i class="fas fa-filter"></i> Filter Requests</a></li>
+                    <li><a href="#"><i class="fas fa-file-export"></i> Export Requests</a></li>
+                </ul>
+            </aside>
+
+            <section class="content">
+                <div class="content-header">
+                    <h2>Ride Requests</h2>
+                    <button class="btn btn-primary" id="add-request-btn"><i class="fas fa-plus"></i> New Request</button>
+                </div>
+
+                <div class="request-filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search requests...">
+                    </div>
+                    <div class="filter-dropdown">
+                        <select>
+                            <option value="all">All Requests</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div class="status-tabs">
+                    <div class="status-tab active" data-status="all">All <span class="request-count">42</span></div>
+                    <div class="status-tab" data-status="pending">Pending <span class="request-count">12</span></div>
+                    <div class="status-tab" data-status="assigned">Assigned <span class="request-count">18</span></div>
+                    <div class="status-tab" data-status="completed">Completed <span class="request-count">10</span></div>
+                    <div class="status-tab" data-status="cancelled">Cancelled <span class="request-count">2</span></div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Pickup Location</th>
+                            <th>Destination</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="client-info">
+                                    <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                                    <span>Margaret Johnson</span>
+                                </div>
+                            </td>
+                            <td>123 Oak St</td>
+                            <td>Medical Center</td>
+                            <td>03/25/2025 9:00 AM</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-success assign-btn"><i class="fas fa-user-check"></i></button>
+                                <button class="btn btn-secondary view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger cancel-btn"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="client-info">
+                                    <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                                    <span>Robert Smith</span>
+                                </div>
+                            </td>
+                            <td>456 Pine Ave</td>
+                            <td>Community Center</td>
+                            <td>03/25/2025 10:30 AM</td>
+                            <td><span class="status assigned">Assigned</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-primary view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning reassign-btn"><i class="fas fa-user-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="client-info">
+                                    <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                                    <span>Eleanor Davis</span>
+                                </div>
+                            </td>
+                            <td>789 Maple Dr</td>
+                            <td>Grocery Store</td>
+                            <td>03/25/2025 1:00 PM</td>
+                            <td><span class="status completed">Completed</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-success repeat-btn"><i class="fas fa-redo"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="client-info">
+                                    <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                                    <span>James Wilson</span>
+                                </div>
+                            </td>
+                            <td>101 Elm St</td>
+                            <td>Senior Center</td>
+                            <td>03/26/2025 8:00 AM</td>
+                            <td><span class="status pending">Pending</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-success assign-btn"><i class="fas fa-user-check"></i></button>
+                                <button class="btn btn-secondary view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning edit-btn"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger cancel-btn"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="client-info">
+                                    <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                                    <span>Emma Thompson</span>
+                                </div>
+                            </td>
+                            <td>202 Cedar Ln</td>
+                            <td>Pharmacy</td>
+                            <td>03/26/2025 11:00 AM</td>
+                            <td><span class="status assigned">Assigned</span></td>
+                            <td class="action-buttons">
+                                <button class="btn btn-primary view-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning reassign-btn"><i class="fas fa-user-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- New Request Modal -->
+    <div id="new-request-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Ride Request</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="new-request-form">
+                <div class="form-group">
+                    <label for="request-client">Client:</label>
+                    <select id="request-client" class="form-control" required>
+                        <option value="">Select a client</option>
+                        <option value="1">Margaret Johnson</option>
+                        <option value="2">Robert Smith</option>
+                        <option value="3">Eleanor Davis</option>
+                        <option value="4">James Wilson</option>
+                        <option value="5">Emma Thompson</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="request-date">Date:</label>
+                        <input type="date" id="request-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="request-time">Time:</label>
+                        <input type="time" id="request-time" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="request-pickup">Pickup Location:</label>
+                    <input type="text" id="request-pickup" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="request-destination">Destination:</label>
+                    <input type="text" id="request-destination" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="request-instructions">Special Instructions:</label>
+                    <textarea id="request-instructions" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mobility Aids:</label>
+                    <div class="mobility-aids">
+                        <div class="mobility-aid">
+                            <input type="checkbox" id="wheelchair" name="mobility-aids" value="wheelchair">
+                            <label for="wheelchair">Wheelchair</label>
+                        </div>
+                        <div class="mobility-aid">
+                            <input type="checkbox" id="walker" name="mobility-aids" value="walker">
+                            <label for="walker">Walker</label>
+                        </div>
+                        <div class="mobility-aid">
+                            <input type="checkbox" id="cane" name="mobility-aids" value="cane">
+                            <label for="cane">Cane</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div id="request-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ride Request Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            
+            <div class="request-details">
+                <div class="detail-row">
+                    <div class="detail-label">Client:</div>
+                    <div class="detail-value">
+                        <div class="client-info">
+                            <img src="/api/placeholder/32/32" alt="Client Avatar" class="client-avatar">
+                            <span>Margaret Johnson</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Date & Time:</div>
+                    <div class="detail-value">March 25, 2025 at 9:00 AM</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Pickup Location:</div>
+                    <div class="detail-value">123 Oak St, Anytown</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Destination:</div>
+                    <div class="detail-value">Medical Center, 456 Health Ave</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Status:</div>
+                    <div class="detail-value"><span class="status pending">Pending</span></div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Special Instructions:</div>
+                    <div class="detail-value">Needs wheelchair assistance. Prefers female driver if available.</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Mobility Aids:</div>
+                    <div class="detail-value">
+                        <div class="mobility-aids">
+                            <div class="mobility-aid">
+                                <i class="fas fa-wheelchair"></i>
+                                <span>Wheelchair</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Requested On:</div>
+                    <div class="detail-value">March 24, 2025 at 2:30 PM</div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary cancel-modal">Close</button>
+                <button type="button" class="btn btn-success assign-btn">Assign Driver</button>
+                <button type="button" class="btn btn-warning edit-btn">Edit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Driver Modal -->
+    <div id="assign-driver-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Assign Driver</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="assign-driver-form">
+                <input type="hidden" id="request-id">
+                
+                <div class="form-group">
+                    <label for="driver-select">Select Driver:</label>
+                    <select id="driver-select" class="form-control" required>
+                        <option value="">Select a driver</option>
+                        <option value="1">Michael Brown (Van #12)</option>
+                        <option value="2">Sarah Jones (Sedan #5)</option>
+                        <option value="3">John Williams (Van #8)</option>
+                        <option value="4">Lisa Garcia (Sedan #3)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="estimated-time">Estimated Pickup Time:</label>
+                    <input type="time" id="estimated-time" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-notes">Notes for Driver:</label>
+                    <textarea id="driver-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const addRequestBtn = document.getElementById('add-request-btn');
+        const newRequestBtn = document.getElementById('new-request-btn');
+        const newRequestModal = document.getElementById('new-request-modal');
+        const requestDetailsModal = document.getElementById('request-details-modal');
+        const assignDriverModal = document.getElementById('assign-driver-modal');
+        const newRequestForm = document.getElementById('new-request-form');
+        const assignDriverForm = document.getElementById('assign-driver-form');
+        const closeButtons = document.querySelectorAll('.close');
+        const cancelButtons = document.querySelectorAll('.cancel-modal');
+        const statusTabs = document.querySelectorAll('.status-tab');
+        const viewButtons = document.querySelectorAll('.view-btn');
+        const assignButtons = document.querySelectorAll('.assign-btn');
+        const modalAssignBtn = document.querySelector('#request-details-modal .assign-btn');
+
+        // Event Listeners
+        addRequestBtn.addEventListener('click', openNewRequestModal);
+        newRequestBtn.addEventListener('click', openNewRequestModal);
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        cancelButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        statusTabs.forEach(tab => {
+            tab.addEventListener('click', filterByStatus);
+        });
+        
+        viewButtons.forEach(button => {
+            button.addEventListener('click', openRequestDetailsModal);
+        });
+        
+        assignButtons.forEach(button => {
+            button.addEventListener('click', openAssignDriverModal);
+        });
+        
+        modalAssignBtn.addEventListener('click', openAssignDriverModal);
+        
+        newRequestForm.addEventListener('submit', createNewRequest);
+        assignDriverForm.addEventListener('submit', assignDriverToRequest);
+
+        // Window click event to close modals
+        window.addEventListener('click', (e) => {
+            if (e.target === newRequestModal || e.target === requestDetailsModal || e.target === assignDriverModal) {
+                closeModals();
+            }
+        });
+
+        // Functions
+        function openNewRequestModal() {
+            newRequestModal.style.display = 'flex';
+            // Set default date to today
+            document.getElementById('request-date').valueAsDate = new Date();
+        }
+
+        function openRequestDetailsModal() {
+            requestDetailsModal.style.display = 'flex';
+        }
+
+        function openAssignDriverModal() {
+            closeModals();
+            assignDriverModal.style.display = 'flex';
+        }
+
+        function closeModals() {
+            newRequestModal.style.display = 'none';
+            requestDetailsModal.style.display = 'none';
+            assignDriverModal.style.display = 'none';
+        }
+
+        function filterByStatus(e) {
+            const status = e.target.getAttribute('data-status');
+            
+            // Update active tab
+            statusTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            
+            // In a real application, this would filter the requests
+            console.log('Filtering by status:', status);
+        }
+
+        function createNewRequest(e) {
+            e.preventDefault();
+            
+            const client = document.getElementById('request-client').value;
+            const date = document.getElementById('request-date').value;
+            const time = document.getElementById('request-time').value;
+            const pickup = document.getElementById('request-pickup').value;
+            const destination = document.getElementById('request-destination').value;
+            const instructions = document.getElementById('request-instructions').value;
+            
+            const mobilityAids = [];
+            if (document.getElementById('wheelchair').checked) mobilityAids.push('wheelchair');
+            if (document.getElementById('walker').checked) mobilityAids.push('walker');
+            if (document.getElementById('cane').checked) mobilityAids.push('cane');
+            
+            // In a real application, this would send data to a server
+            alert('Ride request created successfully!');
+            
+            // Reset form and close modal
+            newRequestForm.reset();
+            closeModals();
+            
+            // Update UI would happen here
+            console.log('New ride request:', {
+                client,
+                date,
+                time,
+                pickup,
+                destination,
+                instructions,
+                mobilityAids
+            });
+        }
+
+        function assignDriverToRequest(e) {
+            e.preventDefault();
+            
+            const driver = document.getElementById('driver-select').value;
+            const estimatedTime = document.getElementById('estimated-time').value;
+            const notes = document.getElementById('driver-notes').value;
+            
+            // In a real application, this would send data to a server
+            alert('Driver assigned successfully!');
+            
+            // Reset form and close modal
+            assignDriverForm.reset();
+            closeModals();
+            
+            // Update UI would happen here
+            console.log('Driver assigned:', {
+                driver,
+                estimatedTime,
+                notes
+            });
+        }
+    </script>
+</body>
+</html>

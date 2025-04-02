@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Savvy Rides - Settings</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6789b5;
+            --accent-color: #ff9f43;
+            --light-color: #f5f6fa;
+            --dark-color: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        main {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-header h2 {
+            color: var(--dark-color);
+        }
+
+        .settings-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--dark-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .settings-tab:hover {
+            color: var(--primary-color);
+        }
+
+        .settings-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .settings-section {
+            display: none;
+            margin-bottom: 2rem;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-section h3 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-check input {
+            width: auto;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #fb8c00;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #e53935;
+        }
+
+        /* API Key Section */
+        .api-key-container {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-key-value {
+            font-family: monospace;
+            background-color: white;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            word-break: break-all;
+        }
+
+        /* User List */
+        .user-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .user-list th, .user-list td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-list th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .user-list tr:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .user-info-cell {
+            display: flex;
+            align-items: center;
+        }
+
+        .role-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .role-admin {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .role-dispatcher {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .role-driver {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .settings-tabs {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .user-list {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            <span>Tech Savvy Rides</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Ride Requests</a></li>
+                <li><a href="#">Schedule</a></li>
+                <li><a href="#" class="active">Settings</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <span>Admin</span>
+            <img src="/api/placeholder/40/40" alt="User Avatar">
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-car"></i> Ride Requests</a></li>
+                    <li><a href="#"><i class="fas fa-calendar"></i> Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#"><i class="fas fa-id-card"></i> Drivers</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="#system-settings"><i class="fas fa-server"></i> System Settings</a></li>
+                    <li><a href="#user-management"><i class="fas fa-users-cog"></i> User Management</a></li>
+                    <li><a href="#api-settings"><i class="fas fa-code"></i> API Settings</a></li>
+                </ul>
+            </aside>
+
+            <section class="content">
+                <div class="content-header">
+                    <h2>System Settings</h2>
+                    <button class="btn btn-primary" id="save-settings-btn"><i class="fas fa-save"></i> Save Settings</button>
+                </div>
+
+                <div class="settings-tabs">
+                    <div class="settings-tab active" data-tab="system">System</div>
+                    <div class="settings-tab" data-tab="users">Users</div>
+                    <div class="settings-tab" data-tab="api">API</div>
+                    <div class="settings-tab" data-tab="notifications">Notifications</div>
+                    <div class="settings-tab" data-tab="integrations">Integrations</div>
+                </div>
+
+                <!-- System Settings -->
+                <div class="settings-section active" id="system-settings">
+                    <h3>General Settings</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company-name">Company Name</label>
+                            <input type="text" id="company-name" class="form-control" value="Tech Savvy Rides">
+                        </div>
+                        <div class="form-group">
+                            <label for="timezone">Timezone</label>
+                            <select id="timezone" class="form-control">
+                                <option value="America/New_York" selected>Eastern Time (ET)</option>
+                                <option value="America/Chicago">Central Time (CT)</option>
+                                <option value="America/Denver">Mountain Time (MT)</option>
+                                <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logo-upload">Company Logo</label>
+                        <input type="file" id="logo-upload" class="form-control">
+                        <small class="text-muted">Recommended size: 300x100 pixels</small>
+                    </div>
+
+                    <h3>Ride Settings</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="default-ride-duration">Default Ride Duration (minutes)</label>
+                            <input type="number" id="default-ride-duration" class="form-control" value="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="cancelation-window">Cancellation Window (hours)</label>
+                            <input type="number" id="cancelation-window" class="form-control" value="2">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ride Types</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="enable-wheelchair" checked>
+                            <label for="enable-wheelchair">Wheelchair Accessible</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="enable-pet" checked>
+                            <label for="enable-pet">Pet Friendly</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="enable-shared">
+                            <label for="enable-shared">Shared Rides</label>
+                        </div>
+                    </div>
+
+                    <h3>Business Hours</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weekday-start">Weekday Start Time</label>
+                            <input type="time" id="weekday-start" class="form-control" value="08:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="weekday-end">Weekday End Time</label>
+                            <input type="time" id="weekday-end" class="form-control" value="20:00">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weekend-start">Weekend Start Time</label>
+                            <input type="time" id="weekend-start" class="form-control" value="09:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="weekend-end">Weekend End Time</label>
+                            <input type="time" id="weekend-end" class="form-control" value="18:00">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Management -->
+                <div class="settings-section" id="user-management">
+                    <h3>User Accounts</h3>
+                    <button class="btn btn-primary mb-3" id="add-user-btn"><i class="fas fa-user-plus"></i> Add User</button>
+                    
+                    <table class="user-list">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Last Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="user-info-cell">
+                                        <img src="/api/placeholder/32/32" alt="User Avatar" class="user-avatar">
+                                        <span>Admin User</span>
+                                    </div>
+                                </td>
+                                <td>admin@techsavvyrides.com</td>
+                                <td><span class="role-badge role-admin">Administrator</span></td>
+                                <td>Today, 09:45 AM</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info-cell">
+                                        <img src="/api/placeholder/32/32" alt="User Avatar" class="user-avatar">
+                                        <span>Dispatcher 1</span>
+                                    </div>
+                                </td>
+                                <td>dispatcher1@techsavvyrides.com</td>
+                                <td><span class="role-badge role-dispatcher">Dispatcher</span></td>
+                                <td>Today, 10:30 AM</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-info-cell">
+                                        <img src="/api/placeholder/32/32" alt="User Avatar" class="user-avatar">
+                                        <span>Driver Supervisor</span>
+                                    </div>
+                                </td>
+                                <td>supervisor@techsavvyrides.com</td>
+                                <td><span class="role-badge role-driver">Driver Manager</span></td>
+                                <td>Yesterday, 4:15 PM</td>
+                                <td>
+                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="mt-4">Roles & Permissions</h3>
+                    <div class="form-group">
+                        <label>Administrator Permissions</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="admin-system-settings" checked disabled>
+                            <label for="admin-system-settings">System Settings</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="admin-user-management" checked disabled>
+                            <label for="admin-user-management">User Management</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="admin-view-reports" checked disabled>
+                            <label for="admin-view-reports">View Reports</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dispatcher Permissions</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="dispatcher-ride-management" checked>
+                            <label for="dispatcher-ride-management">Ride Management</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="dispatcher-client-management" checked>
+                            <label for="dispatcher-client-management">Client Management</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="dispatcher-view-reports">
+                            <label for="dispatcher-view-reports">View Reports</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Settings -->
+                <div class="settings-section" id="api-settings">
+                    <h3>API Configuration</h3>
+                    <div class="api-key-container">
+                        <label>API Key</label>
+                        <div class="api-key-value">sk_live_51Habc1234Zyxwv9876PqrstUVWXyz1234abcd</div>
+                        <button class="btn btn-secondary"><i class="fas fa-redo"></i> Regenerate Key</button>
+                        <button class="btn btn-danger"><i class="fas fa-eye-slash"></i> Revoke Key</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="api-access-level">API Access Level</label>
+                        <select id="api-access-level" class="form-control">
+                            <option value="full">Full Access</option>
+                            <option value="read-only" selected>Read Only</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Allowed IP Addresses</label>
+                        <input type="text" class="form-control" placeholder="192.168.1.1, 10.0.0.1">
+                        <small class="text-muted">Leave empty to allow from any IP address</small>
+                    </div>
+
+                    <h3>Webhooks</h3>
+                    <div class="form-group">
+                        <label for="webhook-url">Webhook URL</label>
+                        <input type="url" id="webhook-url" class="form-control" placeholder="https://yourdomain.com/webhook">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Webhook Events</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="webhook-new-ride" checked>
+                            <label for="webhook-new-ride">New Ride Request</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="webhook-ride-status" checked>
+                            <label for="webhook-ride-status">Ride Status Changes</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="webhook-driver-assigned">
+                            <label for="webhook-driver-assigned">Driver Assigned</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Settings -->
+                <div class="settings-section" id="notification-settings">
+                    <h3>Email Notifications</h3>
+                    <div class="form-group">
+                        <label for="admin-email">Admin Email</label>
+                        <input type="email" id="admin-email" class="form-control" value="admin@techsavvyrides.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notification Types</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="notify-new-request" checked>
+                            <label for="notify-new-request">New Ride Requests</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="notify-cancellations" checked>
+                            <label for="notify-cancellations">Ride Cancellations</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="notify-emergency">
+                            <label for="notify-emergency">Emergency Situations</label>
+                        </div>
+                    </div>
+
+                    <h3>SMS Notifications</h3>
+                    <div class="form-group">
+                        <label for="sms-provider">SMS Provider</label>
+                        <select id="sms-provider" class="form-control">
+                            <option value="twilio">Twilio</option>
+                            <option value="nexmo">Nexmo</option>
+                            <option value="aws">AWS SNS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sms-api-key">API Key</label>
+                            <input type="text" id="sms-api-key" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="sms-api-secret">API Secret</label>
+                            <input type="password" id="sms-api-secret" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations Settings -->
+                <div class="settings-section" id="integration-settings">
+                    <h3>Payment Gateway</h3>
+                    <div class="form-group">
+                        <label for="payment-gateway">Payment Provider</label>
+                        <select id="payment-gateway" class="form-control">
+                            <option value="stripe">Stripe</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="square">Square</option>
+                            <option value="none" selected>None</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="payment-api-key">API Key</label>
+                            <input type="text" id="payment-api-key" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="payment-api-secret">API Secret</label>
+                            <input type="password" id="payment-api-secret" class="form-control">
+                        </div>
+                    </div>
+
+                    <h3>Calendar Integration</h3>
+                    <div class="form-group">
+                        <label for="calendar-provider">Calendar Service</label>
+                        <select id="calendar-provider" class="form-control">
+                            <option value="google">Google Calendar</option>
+                            <option value="outlook">Microsoft Outlook</option>
+                            <option value="apple">Apple Calendar</option>
+                            <option value="none" selected>None</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary"><i class="fab fa-google"></i> Connect Google Calendar</button>
+                    </div>
+
+                    <h3>Mapping Service</h3>
+                    <div class="form-group">
+                        <label for="map-provider">Map Provider</label>
+                        <select id="map-provider" class="form-control">
+                            <option value="google" selected>Google Maps</option>
+                            <option value="mapbox">Mapbox</option>
+                            <option value="here">HERE Maps</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="map-api-key">API Key</label>
+                        <input type="text" id="map-api-key" class="form-control" placeholder="AIzaSyABC123...">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add User Modal -->
+    <!-- <div id="add-user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="add-user-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-user-firstname">First Name</label>
+                        <input type="text" id="new-user-firstname" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-user-lastname">Last Name</label>
+                        <input type="text" id="new-user-lastname" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-user-email">Email</label>
+                    <input type="email" id="new-user-email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-user-role">Role</label>
+                    <select id="new-user-role" class="form-control" required>
+                        <option value="admin">Administrator</option>
+                        <option value="dispatcher">Dispatcher</option>
+                        <option value="driver-manager">Driver Manager</option>
+                        <option value="driver">Driver</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-user-password">Password</label>
+                    <input type="password" id="new-user-password" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-user-confirm">Confirm Password</label>
+                    <input type="password" id="new-user-confirm" class="form-control" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div> -->
+
+    <script>
+        // DOM Elements
+        const saveSettingsBtn = document.getElementById('save-settings-btn');
+        const addUserBtn = document.getElementById('add-user-btn');
+        const settingsTabs = document.querySelectorAll('.settings-tab');
+        const settingsSections = document.querySelectorAll('.settings-section');
+        const addUserModal = document.getElementById('add-user-modal');
+        const addUserForm = document.getElementById('add-user-form');
+        const closeButtons = document.querySelectorAll('.close');
+        const cancelButtons = document.querySelectorAll('.cancel-modal');
+
+        // Event Listeners
+        saveSettingsBtn.addEventListener('click', saveSettings);
+        addUserBtn.addEventListener('click', openAddUserModal);
+        
+        settingsTabs.forEach(tab => {
+            tab.addEventListener('click', switchSettingsTab);
+        });
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        cancelButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        addUserForm.addEventListener('submit', createNewUser);
+
+        // Functions
+        function switchSettingsTab(e) {
+            const tabId = e.target.getAttribute('data-tab');
+            
+            // Update active tab
+            settingsTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            
+            // Show corresponding section
+            settingsSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === tabId + '-settings') {
+                    section.classList.add('active');
+                }
+            });
+        }
+
+        function openAddUserModal() {
+            addUserModal.style.display = 'flex';
+        }
+
+        function closeModals() {
+            addUserModal.style.display = 'none';
+        }
+
+        function saveSettings() {
+            // In a real application, this would save all settings
+            alert('Settings saved successfully!');
+            console.log('Settings saved');
+        }
+
+        function createNewUser(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('new-user-firstname').value;
+            const lastName = document.getElementById('new-user-lastname').value;
+            const email = document.getElementById('new-user-email').value;
+            const role = document.getElementById('new-user-role').value;
+            const password = document.getElementById('new-user-password').value;
+            const confirm = document.getElementById('new-user-confirm').value;
+            
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // In a real application, this would create the user
+            alert(`User ${firstName} ${lastName} created successfully with ${role} role!`);
+            
+            // Reset form and close modal
+            addUserForm.reset();
+            closeModals();
+            
+            // Update UI would happen here
+            console.log('New user created:', {
+                firstName,
+                lastName,
+                email,
+                role
+            });
+        }
+
+        // Initialize the first tab as active
+        document.querySelector('.settings-tab.active').click();
+    </script>
+</body>
+</html>

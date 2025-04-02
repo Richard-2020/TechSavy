@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Savvy Rides - Drivers</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6789b5;
+            --accent-color: #ff9f43;
+            --light-color: #f5f6fa;
+            --dark-color: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        main {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1.5rem;
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-header h2 {
+            color: var(--dark-color);
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-dropdown select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            appearance: none;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        .filter-dropdown i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            pointer-events: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card h3 {
+            color: var(--dark-color);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+        }
+
+        .driver-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .driver-name {
+            font-weight: 500;
+        }
+
+        .driver-email {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .status.active {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .status.inactive {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+
+        .status.on-duty {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .status.off-duty {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .rating i {
+            color: #ffc107;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #fb8c00;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #e53935;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background-color: var(--light-color);
+        }
+
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .modal-header h3 {
+            color: var(--dark-color);
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Driver Details Modal */
+        .driver-details {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .driver-avatar-lg {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-color);
+        }
+
+        .driver-meta {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .driver-meta h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .driver-meta .status {
+            align-self: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .driver-meta .rating {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .driver-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .driver-stat {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .driver-stat .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .driver-stat .label {
+            font-size: 0.8rem;
+            color: var(--dark-color);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .driver-details {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .driver-avatar-lg {
+                margin: 0 auto;
+            }
+
+            .driver-meta .status,
+            .driver-meta .rating {
+                align-self: center;
+            }
+
+            .driver-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-car"></i>
+            <span>Tech Savvy Rides</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Clients</a></li>
+                <li><a href="#" class="active">Drivers</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <span>Admin</span>
+            <img src="/api/placeholder/40/40" alt="User Avatar">
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Navigation</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-car"></i> Ride Requests</a></li>
+                    <li><a href="#"><i class="fas fa-calendar"></i> Schedule</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#" class="active"><i class="fas fa-id-card"></i> Drivers</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+                <h3>Quick Actions</h3>
+                <ul>
+                    <li><a href="#" id="new-driver-btn"><i class="fas fa-user-plus"></i> Add Driver</a></li>
+                    <li><a href="#"><i class="fas fa-file-export"></i> Export Drivers</a></li>
+                    <li><a href="#"><i class="fas fa-car-alt"></i> Vehicle Management</a></li>
+                </ul>
+            </aside>
+
+            <section class="content">
+                <div class="content-header">
+                    <h2>Driver Management</h2>
+                    <button class="btn btn-primary" id="add-driver-btn"><i class="fas fa-user-plus"></i> Add Driver</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <h3>Total Drivers</h3>
+                        <div class="value">24</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Drivers</h3>
+                        <div class="value">18</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>On Duty</h3>
+                        <div class="value">12</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Rating</h3>
+                        <div class="value">4.7</div>
+                    </div>
+                </div>
+
+                <div class="search-filter">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search drivers...">
+                    </div>
+                    <div class="filter-dropdown">
+                        <select>
+                            <option value="all">All Drivers</option>
+                            <option value="active">Active Only</option>
+                            <option value="on-duty">On Duty</option>
+                            <option value="off-duty">Off Duty</option>
+                        </select>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver</th>
+                            <th>Contact</th>
+                            <th>Vehicle</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="driver-info">
+                                    <img src="/api/placeholder/40/40" alt="Driver Avatar" class="driver-avatar">
+                                    <div>
+                                        <div class="driver-name">Michael Brown</div>
+                                        <div class="driver-email">michael@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>(555) 123-4567</td>
+                            <td>Van #12</td>
+                            <td><span class="status on-duty">On Duty</span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.7</span>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-driver-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="driver-info">
+                                    <img src="/api/placeholder/40/40" alt="Driver Avatar" class="driver-avatar">
+                                    <div>
+                                        <div class="driver-name">Sarah Jones</div>
+                                        <div class="driver-email">sarah@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>(555) 234-5678</td>
+                            <td>Sedan #5</td>
+                            <td><span class="status on-duty">On Duty</span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>5.0</span>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-driver-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="driver-info">
+                                    <img src="/api/placeholder/40/40" alt="Driver Avatar" class="driver-avatar">
+                                    <div>
+                                        <div class="driver-name">John Williams</div>
+                                        <div class="driver-email">john@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>(555) 345-6789</td>
+                            <td>Van #8</td>
+                            <td><span class="status off-duty">Off Duty</span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span>4.2</span>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-driver-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="driver-info">
+                                    <img src="/api/placeholder/40/40" alt="Driver Avatar" class="driver-avatar">
+                                    <div>
+                                        <div class="driver-name">Lisa Garcia</div>
+                                        <div class="driver-email">lisa@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>(555) 456-7890</td>
+                            <td>Sedan #3</td>
+                            <td><span class="status on-duty">On Duty</span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span>4.8</span>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-driver-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="driver-info">
+                                    <img src="/api/placeholder/40/40" alt="Driver Avatar" class="driver-avatar">
+                                    <div>
+                                        <div class="driver-name">David Lee</div>
+                                        <div class="driver-email">david@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>(555) 567-8901</td>
+                            <td>Van #15</td>
+                            <td><span class="status inactive">Inactive</span></td>
+                            <td>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span>4.0</span>
+                                </div>
+                            </td>
+                            <td class="action-buttons">
+                                <button class="btn btn-secondary view-driver-btn"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Driver Modal -->
+    <div id="add-driver-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Driver</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="add-driver-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="driver-first-name">First Name</label>
+                        <input type="text" id="driver-first-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="driver-last-name">Last Name</label>
+                        <input type="text" id="driver-last-name" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-email">Email</label>
+                    <input type="email" id="driver-email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-phone">Phone</label>
+                    <input type="tel" id="driver-phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-address">Address</label>
+                    <input type="text" id="driver-address" class="form-control" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="driver-city">City</label>
+                        <input type="text" id="driver-city" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="driver-state">State</label>
+                        <input type="text" id="driver-state" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="driver-zip">ZIP Code</label>
+                        <input type="text" id="driver-zip" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="driver-license">Driver's License #</label>
+                        <input type="text" id="driver-license" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="license-expiry">Expiry Date</label>
+                        <input type="date" id="license-expiry" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="vehicle-assigned">Vehicle Assigned</label>
+                    <select id="vehicle-assigned" class="form-control" required>
+                        <option value="">Select a vehicle</option>
+                        <option value="van-12">Van #12</option>
+                        <option value="sedan-5">Sedan #5</option>
+                        <option value="van-8">Van #8</option>
+                        <option value="sedan-3">Sedan #3</option>
+                        <option value="van-15">Van #15</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-status">Status</label>
+                    <select id="driver-status" class="form-control" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="driver-notes">Notes</label>
+                    <textarea id="driver-notes" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Driver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Driver Details Modal -->
+    <div id="driver-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Driver Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            
+            <div class="driver-details">
+                <img src="/api/placeholder/120/120" alt="Driver Avatar" class="driver-avatar-lg">
+                <div class="driver-meta">
+                    <h4>Michael Brown</h4>
+                    <span class="status on-duty">On Duty</span>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>4.7 (128 reviews)</span>
+                    </div>
+                    <div>(555) 123-4567</div>
+                    <div>michael@example.com</div>
+                </div>
+            </div>
+            
+            <div class="driver-stats">
+                <div class="driver-stat">
+                    <div class="value">247</div>
+                    <div class="label">Total Rides</div>
+                </div>
+                <div class="driver-stat">
+                    <div class="value">12</div>
+                    <div class="label">Rides This Month</div>
+                </div>
+                <div class="driver-stat">
+                    <div class="value">98%</div>
+                    <div class="label">On Time Rate</div>
+                </div>
+                <div class="driver-stat">
+                    <div class="value">Van #12</div>
+                    <div class="label">Vehicle Assigned</div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary cancel-modal">Close</button>
+                <button type="button" class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const addDriverBtn = document.getElementById('add-driver-btn');
+        const newDriverBtn = document.getElementById('new-driver-btn');
+        const addDriverModal = document.getElementById('add-driver-modal');
+        const driverDetailsModal = document.getElementById('driver-details-modal');
+        const addDriverForm = document.getElementById('add-driver-form');
+        const closeButtons = document.querySelectorAll('.close');
+        const cancelButtons = document.querySelectorAll('.cancel-modal');
+        const viewDriverButtons = document.querySelectorAll('.view-driver-btn');
+
+        // Event Listeners
+        addDriverBtn.addEventListener('click', openAddDriverModal);
+        newDriverBtn.addEventListener('click', openAddDriverModal);
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        cancelButtons.forEach(button => {
+            button.addEventListener('click', closeModals);
+        });
+        
+        viewDriverButtons.forEach(button => {
+            button.addEventListener('click', openDriverDetailsModal);
+        });
+        
+        addDriverForm.addEventListener('submit', addNewDriver);
+
+        // Window click event to close modals
+        window.addEventListener('click', (e) => {
+            if (e.target === addDriverModal || e.target === driverDetailsModal) {
+                closeModals();
+            }
+        });
+
+        // Functions
+        function openAddDriverModal() {
+            addDriverModal.style.display = 'flex';
+        }
+
+        function openDriverDetailsModal() {
+            driverDetailsModal.style.display = 'flex';
+        }
+
+        function closeModals() {
+            addDriverModal.style.display = 'none';
+            driverDetailsModal.style.display = 'none';
+        }
+
+        function addNewDriver(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('driver-first-name').value;
+            const lastName = document.getElementById('driver-last-name').value;
+            const email = document.getElementById('driver-email').value;
+            const phone = document.getElementById('driver-phone').value;
+            const address = document.getElementById('driver-address').value;
+            const city = document.getElementById('driver-city').value;
+            const state = document.getElementById('driver-state').value;
+            const zip = document.getElementById('driver-zip').value;
+            const license = document.getElementById('driver-license').value;
+            const expiry = document.getElementById('license-expiry').value;
+            const vehicle = document.getElementById('vehicle-assigned').value;
+            const status = document.getElementById('driver-status').value;
+            const notes = document.getElementById('driver-notes').value;
+            
+            // In a real application, this would send data to a server
+            alert('Driver added successfully!');
+            
+            // Reset form and close modal
+            addDriverForm.reset();
+            closeModals();
+            
+            // Update UI would happen here
+            console.log('New driver added:', {
+                firstName,
+                lastName,
+                email,
+                phone,
+                address,
+                city,
+                state,
+                zip,
+                license,
+                expiry,
+                vehicle,
+                status,
+                notes
+            });
+        }
+    </script>
+</body>
+</html>
