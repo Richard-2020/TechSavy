@@ -1,2 +1,0 @@
-# TechSavy
-RIT Senior Project
