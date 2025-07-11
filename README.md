@@ -309,7 +309,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. 
 
 ## Author
-Kieran: Ksullivan87
+- Kieran: [Ksullivan87](https://github.com/Ksullivan87)
 
 ## 🔄 Version History
 
